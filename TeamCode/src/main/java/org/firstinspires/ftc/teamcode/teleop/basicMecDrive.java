@@ -7,14 +7,25 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 @Config
 @TeleOp(group = "teleop")
 public class basicMecDrive extends OpMode {
 
 
+
+    public static double b = 0;
+    public static double a = .5;
+    public static double x = 1;
+
+    ServoImplEx servo;
+    ServoImplEx servo2;
 
     DcMotorEx FR;
     DcMotorEx FL;
@@ -43,6 +54,12 @@ public class basicMecDrive extends OpMode {
 
         intake = hardwareMap.get(DcMotorEx.class, "intake");
 
+        servo = (ServoImplEx) hardwareMap.get(Servo.class, "servo1");
+        servo2 = (ServoImplEx) hardwareMap.get(Servo.class, "servo2");
+        servo.setPwmRange(new PwmControl.PwmRange(505, 2495));
+        servo2.setPwmRange(new PwmControl.PwmRange(505, 2495));
+
+
     }
 
     @Override
@@ -52,6 +69,7 @@ public class basicMecDrive extends OpMode {
         telemetry.addData("BR Power",BR.getPower());
         telemetry.addData("FL Power", FL.getPower());
         telemetry.addData("BL Power",BL.getPower());
+        telemetry.addData("1","test");
         telemetry.update();
 
         double d_power = .8-.4*gamepad1.left_trigger+(.5*gamepad1.right_trigger);
@@ -67,13 +85,26 @@ public class basicMecDrive extends OpMode {
         FR.setPower(drive - rotate);
 
 
-        if (gamepad1.y) {
+        if (gamepad2.a) {
+            servo.setPosition(a);
+            servo2.setPosition(a);
+        }
+        if (gamepad2.b) {
+            servo.setPosition(b);
+            servo2.setPosition(b);
+        }
+        if (gamepad2.x) {
+            servo.setPosition(x);
+            servo2.setPosition(x);
+        }
+
+        if (gamepad1.x) {
             intake.setPower(power);
         }
-        if (gamepad1.x) {
+        if (gamepad1.a) {
             intake.setPower(0);
         }
-        if (gamepad1.a) {
+        if (gamepad1.b) {
             intake.setPower(backPower);
         }
         
