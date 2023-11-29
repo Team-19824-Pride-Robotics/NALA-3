@@ -32,8 +32,8 @@ public class axon_servo_test extends OpMode {
     public void init() {
             telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        servo = (ServoImplEx) hardwareMap.get(Servo.class, "servo1");
-       servo2 = (ServoImplEx) hardwareMap.get(Servo.class, "servo2");
+        servo = (ServoImplEx) hardwareMap.get(Servo.class, "lArm");
+       servo2 = (ServoImplEx) hardwareMap.get(Servo.class, "rArm");
         servo.setPwmRange(new PwmControl.PwmRange(505, 2495));
        servo2.setPwmRange(new PwmControl.PwmRange(505, 2495));
         sEncoder = hardwareMap.get(AnalogInput.class, "sEncoder");

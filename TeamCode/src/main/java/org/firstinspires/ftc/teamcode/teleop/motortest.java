@@ -16,9 +16,9 @@ public class motortest extends OpMode {
 
 
 
-    public static int one = 0;
-    public static int two = 100;
-    public static int three  = -100;
+    public static int one = -2000;
+    public static int two = 300;
+    public static int three  = -800;
 
     public static double power = 1;
 
@@ -32,7 +32,7 @@ public class motortest extends OpMode {
     public void init() {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        m1 = hardwareMap.get(DcMotorEx.class, "FR");
+        m1 = hardwareMap.get(DcMotorEx.class, "winch");
         m1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         m1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
