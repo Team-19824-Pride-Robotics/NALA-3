@@ -45,10 +45,8 @@ public class finalTest extends OpMode {
 
     //arm
 
-    double aVar =354;
     double aPos =.99;
 
-    public static double bVar = 214;
     public static double bPosx = .6;
     ServoImplEx Arm;
     ServoImplEx bucket;
@@ -99,19 +97,10 @@ public class finalTest extends OpMode {
     public void loop() {
 
 
-
-
-
-
-        //DIVER 2//
-
-//intake
-
         double pos = sEncoder.getVoltage() / 3.3 * 360;
         double pos2 = sEncoder2.getVoltage() / 3.3 * 360;
 
         aPos =  Range.clip(aPos, .01, .99);
-        aVar =  Range.clip(aVar, 5, 354);
 
         if (gamepad2.right_bumper){
             liftControl = true;
@@ -128,8 +117,8 @@ public class finalTest extends OpMode {
             if (gamepad2.a){
                 aPos = .01;
             }
-            if (gamepad2.b) {
-
+            if (gamepad2.left_stick_y<.2 || gamepad2.left_stick_y>.2){
+                target = gamepad2.left_stick_y * liftM + target;
             }
             if (gamepad1.start) {
                 bPosx =.4;
@@ -145,7 +134,6 @@ public class finalTest extends OpMode {
             }
         }
 
-        aPos = aVar * .0028;//tf is this
 
         controller.setPID(p, i, d);
         int liftPos1 = lift1.getCurrentPosition();
