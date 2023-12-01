@@ -8,14 +8,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import java.lang.Math;
-
-
 
 
 @TeleOp(group = "teleop")
 @Config
-public class pidTest extends OpMode {
+public class pidTest2 extends OpMode {
 
     private PIDController controller;
     public static double p = 0, i = 0, d = 0.005;
@@ -57,14 +54,17 @@ public class pidTest extends OpMode {
     public void loop() {
 
         controller.setPID(p, i, d);
-        int liftPos = lift1.getCurrentPosition();
-        double pid = controller.calculate(liftPos, target);
+        int liftPos1 = lift1.getCurrentPosition();
+        int liftPos2 = lift2.getCurrentPosition();
+        double pid = controller.calculate(liftPos1, target);
+        double pid2 = controller.calculate(liftPos2, target);
         double ff = Math.cos(Math.toRadians(target/tick_in_degrees))*f;
 
         double power = pid +ff;
+        double power2 = pid2 +ff;
 
         lift1.setPower(power);
-        lift2.setPower(power);
+        lift2.setPower(power2);
 
 
         telemetry.addData("target", target);

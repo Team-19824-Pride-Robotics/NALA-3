@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.test;
 
 
 
@@ -17,8 +17,8 @@ import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.Range;
 
 @Config
-@TeleOp(group = "teleop")
-public class teleop extends OpMode {
+@TeleOp(group = "test")
+public class bucketTest extends OpMode {
 
 //pid
     private PIDController controller;
