@@ -24,7 +24,7 @@ public class teleop extends OpMode {
     private PIDController controller;
     public static double p = 0.005, i = 0, d =0;
     public static double f = 0;
-    public static double target = 120;
+    public static double target = 110;
 
     boolean liftControl = false;
 
@@ -60,6 +60,7 @@ public class teleop extends OpMode {
 
 
     //arm
+    public static double pickup = 110;
 
     double aPos =.01;
 
@@ -198,7 +199,7 @@ public class teleop extends OpMode {
         double pos2 = sEncoder2.getVoltage() / 3.3 * 360;
 
         aPos =  Range.clip(aPos, .01, .99);
-        bPosx =  Range.clip(aPos, .01, .99);
+
         if (gamepad2.right_bumper){
             liftControl = true;
             target=300;
@@ -216,10 +217,19 @@ public class teleop extends OpMode {
                 aPos = .99;
             }
             if (gamepad2.left_stick_y<.2 || gamepad2.left_stick_y>.2){
-                target = gamepad2.left_stick_y * liftM + target;
+                target = -gamepad2.left_stick_y * liftM + target;
             }
             if (gamepad1.start) {
-                bPosx =.95;
+                bPosx =.99;
+            }
+            if (gamepad2.dpad_down) {
+                target =1100;
+            }
+            if (gamepad2.dpad_left) {
+                target =2000;
+            }
+            if (gamepad2.dpad_up) {
+                target =2400;
             }
         }
 
@@ -228,7 +238,7 @@ public class teleop extends OpMode {
                 aPos = .01;
             }
             if (pos >= 2 && pos<= 8) {
-                target = 120;
+                target = pickup;
             }
         }
 
