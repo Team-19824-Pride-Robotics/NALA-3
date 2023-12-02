@@ -18,7 +18,7 @@ import java.lang.Math;
 public class pidTest extends OpMode {
 
     private PIDController controller;
-    public static double p = 0, i = 0, d = 0.005;
+    public static double p = 0.005, i = 0, d = 0;
     public static double f = 0;
     public static int target = 0;
     private final double tick_in_degrees = 268.85/180;

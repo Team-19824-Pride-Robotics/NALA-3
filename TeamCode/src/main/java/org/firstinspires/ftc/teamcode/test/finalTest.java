@@ -24,7 +24,8 @@ public class finalTest extends OpMode {
     private PIDController controller;
     public static double p = 0.005, i = 0, d =0;
     public static double f = 0;
-    public static double target = 110;
+    public static double target = 120;
+    public static double pickup = 120;
 
 
     boolean liftControl = false;
@@ -35,7 +36,7 @@ public class finalTest extends OpMode {
     DcMotorEx lift2;
 
 
-    public static double liftM = 10;
+    public static double liftM = 20;
     public static double liftMax = 2000;
 
     //winch
@@ -45,15 +46,16 @@ public class finalTest extends OpMode {
 
     //arm
 
-    double aPos =.99;
+    double aPos =.01;
 
-    public static double bPosx = .6;
+    public static double bPosx = .2;
     ServoImplEx Arm;
     ServoImplEx bucket;
     // AnalogInput sEncoder;
     AnalogInput sEncoder;
     AnalogInput sEncoder2;
 
+    DcMotorEx intake;
     //drone
 
 
@@ -87,6 +89,7 @@ public class finalTest extends OpMode {
 
 
 
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
 
 
 
@@ -97,6 +100,19 @@ public class finalTest extends OpMode {
     public void loop() {
 
 
+        if (gamepad2.x) {
+            intake.setPower(1);
+        }
+        if (gamepad2.b) {
+            intake.setPower(-1);
+        }
+        if (gamepad2.a){
+            intake.setPower(0);
+        }
+
+        target =  Range.clip(target, 110, liftMax);
+
+
         double pos = sEncoder.getVoltage() / 3.3 * 360;
         double pos2 = sEncoder2.getVoltage() / 3.3 * 360;
 
@@ -105,32 +121,33 @@ public class finalTest extends OpMode {
         if (gamepad2.right_bumper){
             liftControl = true;
             target=300;
+            bPosx=.55;
         }
         if (gamepad2.left_bumper){
             liftControl = false;
-            bPosx=.6;
+            bPosx=.2;
         }
 
 
 
         if (liftControl) {
-            if (gamepad2.a){
-                aPos = .01;
+            if (gamepad2.y){
+                aPos = .99;
             }
             if (gamepad2.left_stick_y<.2 || gamepad2.left_stick_y>.2){
                 target = gamepad2.left_stick_y * liftM + target;
             }
             if (gamepad1.start) {
-                bPosx =.4;
+                bPosx =.95;
             }
         }
 
         if (!liftControl) {
-            if (pos2 >= 140 && pos2 <=145  ){
-                aPos = .9;
+            if (pos2 >= 72 && pos2 <=76  ){
+                aPos = .01;
             }
-            if (pos >= 352 && pos<= 354) {
-                target = 110;
+            if (pos >= 2 && pos<= 8) {
+                target = pickup;
             }
         }
 
@@ -157,8 +174,11 @@ public class finalTest extends OpMode {
         telemetry.addData("power1", lift1.getPower());
         telemetry.addData("pos2", lift2.getCurrentPosition());
         telemetry.addData("power2", lift2.getPower());
+        telemetry.addData("arm", pos);
+        telemetry.addData("bucket", pos2);
+
+
         telemetry.update();
-        target =  Range.clip(target, 110, 2400);
     }
 
 }

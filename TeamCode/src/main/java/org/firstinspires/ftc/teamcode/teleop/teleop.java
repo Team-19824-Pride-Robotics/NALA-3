@@ -24,8 +24,7 @@ public class teleop extends OpMode {
     private PIDController controller;
     public static double p = 0.005, i = 0, d =0;
     public static double f = 0;
-    public static double target = 110;
-
+    public static double target = 120;
 
     boolean liftControl = false;
 
@@ -37,6 +36,7 @@ public class teleop extends OpMode {
     double rotate;
     //intake
     DcMotorEx intake;
+
     public static double power = 1;
     public static double backPower =-1;
     //lift
@@ -61,11 +61,9 @@ public class teleop extends OpMode {
 
     //arm
 
-    double aVar =354;
-    double aPos =.99;
+    double aPos =.01;
 
-    public static double bVar = 214;
-    public static double bPosx = .6;
+    public static double bPosx = .2;
     ServoImplEx Arm;
     ServoImplEx bucket;
     // AnalogInput sEncoder;
@@ -123,15 +121,6 @@ public class teleop extends OpMode {
     @Override
     public void loop() {
 
-
-        telemetry.addData("target",target);
-        telemetry.addData("Run time",getRuntime());
-        telemetry.addData("1","test");
-        telemetry.addData("pos1", lift1.getCurrentPosition());
-        telemetry.addData("power1", lift1.getPower());
-        telemetry.addData("pos2", lift2.getCurrentPosition());
-        telemetry.addData("power2", lift2.getPower());
-        telemetry.update();
         target =  Range.clip(target, 110, 2400);
 
         double d_power = .8-.4*gamepad1.left_trigger+(.5*gamepad1.right_trigger);
@@ -209,41 +198,39 @@ public class teleop extends OpMode {
         double pos2 = sEncoder2.getVoltage() / 3.3 * 360;
 
         aPos =  Range.clip(aPos, .01, .99);
-        aVar =  Range.clip(aVar, 5, 354);
-
+        bPosx =  Range.clip(aPos, .01, .99);
         if (gamepad2.right_bumper){
             liftControl = true;
             target=300;
+            bPosx=.55;
         }
         if (gamepad2.left_bumper){
             liftControl = false;
-            bPosx=.6;
+            bPosx=.2;
         }
 
 
 
         if (liftControl) {
+            if (gamepad2.y){
+                aPos = .99;
+            }
             if (gamepad2.left_stick_y<.2 || gamepad2.left_stick_y>.2){
                 target = gamepad2.left_stick_y * liftM + target;
             }
-            if (gamepad2.right_stick_y < .2 || gamepad2.right_stick_y > -.2) {
-                aVar = aVar + gamepad2.right_stick_y *10;
-            }
             if (gamepad1.start) {
-                bPosx =.4;
+                bPosx =.95;
             }
         }
 
         if (!liftControl) {
-            if (pos2 >= 140 && pos2 <=145  ){
-                aVar = 354;
+            if (pos2 >= 72 && pos2 <=76  ){
+                aPos = .01;
             }
-            if (pos >= 352 && pos<= 354) {
-                target = 110;
+            if (pos >= 2 && pos<= 8) {
+                target = 120;
             }
         }
-
-        aPos = aVar * .0028;//tf is this
 
         controller.setPID(p, i, d);
         int liftPos1 = lift1.getCurrentPosition();
@@ -260,6 +247,16 @@ public class teleop extends OpMode {
         Arm.setPosition(aPos);
         bucket.setPosition(bPosx);
 
+        telemetry.addData("target",target);
+        telemetry.addData("Run time",getRuntime());
+        telemetry.addData("1","test");
+        telemetry.addData("pos1", lift1.getCurrentPosition());
+        telemetry.addData("power1", lift1.getPower());
+        telemetry.addData("pos2", lift2.getCurrentPosition());
+        telemetry.addData("power2", lift2.getPower());
+        telemetry.addData("arm", pos);
+        telemetry.addData("bucket", pos2);
+        telemetry.update();
     }
 
 }

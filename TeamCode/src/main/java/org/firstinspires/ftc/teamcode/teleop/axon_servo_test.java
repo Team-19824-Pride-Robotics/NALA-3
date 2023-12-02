@@ -47,6 +47,7 @@ public class axon_servo_test extends OpMode {
     public void loop() {
 
         double pos = sEncoder.getVoltage() / 3.3 * 360;
+        double pos2 = sEncoder2.getVoltage() / 3.3 * 360;
 
 
         if (gamepad1.a) {
@@ -70,6 +71,7 @@ public class axon_servo_test extends OpMode {
         }
         telemetry.addData("Run time",getRuntime());
         telemetry.addData("pos1", pos);
+        telemetry.addData("pos2", pos2);
         telemetry.addData("test", 2);
         telemetry.update();
     }
